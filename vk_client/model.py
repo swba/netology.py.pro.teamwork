@@ -64,12 +64,31 @@ class VkUser(ModelBase):
 
     @property
     def age(self) -> Optional[int]:
-        """Returns user's age"""
+        """Returns user's age
+
+        Returns:
+            User age (in whole years) or None if user's birthday is not
+            specified.
+
+        """
         if self.bdate and self.bdate.count('.') == 2:
             if dt := datetime.strptime(self.bdate, '%d.%m.%Y'):
                 # @see https://stackoverflow.com/a/9754466/5111076
                 today = datetime.today()
                 return today.year - dt.year - ((today.month, today.day) < (dt.month, dt.day))
+
+    @property
+    def gender(self) -> Optional[str]:
+        """Returns user's gender name
+
+        Returns:
+            Either "male" or "female" string, or None if user's gender
+            is not specified.
+
+        """
+        if self.sex:
+            return 'male' if self.sex == 2 else 'female'
+        return None
 
 
 @dataclass
