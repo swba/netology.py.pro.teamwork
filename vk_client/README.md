@@ -32,7 +32,7 @@ print(vk_users)
 # Поиск пользователей.
 # Ищем 5 мужчин от 38 до 42 лет, исключая Павла Дурова.
 # Переменная vk_users - это список объектов класса VkUser. 
-vk_users = vk_client.search_users(exclude=[1], age_from=38, age_to=42, count=10)
+vk_users = vk_client.search_users(exclude=[1], age_from=38, age_to=42, count=5)
 print(vk_users)
 
 # Получение фотографий пользователя.
