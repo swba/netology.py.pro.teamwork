@@ -1,3 +1,10 @@
 /.idea/
 /.venv/
 .env
+/VK.py
+# Python cache
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+# Python cache directories
+tests/__pycache__/
