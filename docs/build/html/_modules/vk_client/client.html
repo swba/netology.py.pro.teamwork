@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vk_client.client &mdash; VKinder 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            VKinder
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../vk_client.html">vk_client package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">VKinder</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">vk_client.client</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for vk_client.client</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Unpack</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">vk_api</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">VkUser</span><span class="p">,</span> <span class="n">VkPhoto</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.params</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParamsPhotosGet</span><span class="p">,</span> <span class="n">ParamsUsersSearch</span>
+
+
+<div class="viewcode-block" id="VkClient">
+<a class="viewcode-back" href="../../vk_client.html#vk_client.client.VkClient">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">VkClient</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A client for VK API</span>
+
+<span class="sd">    See https://dev.vk.com/ru/reference</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">DEFAULT_VERSION</span> <span class="o">=</span> <span class="s1">&#39;5.199&#39;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;VK API client constructor</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            token: VK API access token.</span>
+<span class="sd">            version: (optional) VK API version.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            vk_api.AuthError: In case of authentication error.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vk_session</span> <span class="o">=</span> <span class="n">vk_api</span><span class="o">.</span><span class="n">VkApi</span><span class="p">(</span>
+            <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+            <span class="n">api_version</span><span class="o">=</span><span class="n">version</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_VERSION</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="VkClient.get_user">
+<a class="viewcode-back" href="../../vk_client.html#vk_client.client.VkClient.get_user">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;about,bdate,city,sex,photo_max&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">VkUser</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieves user info.</span>
+
+<span class="sd">        @see https://dev.vk.com/ru/method/users.get</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user_id: VK user ID.</span>
+<span class="sd">            fields: (optional) List of additional fields to fetch.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            VK user object.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            vk_api.VkApiError: If VK API responded with an error.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vk_session</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="s1">&#39;users.get&#39;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s1">&#39;user_ids&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">user_id</span><span class="p">),</span>
+            <span class="s1">&#39;fields&#39;</span><span class="p">:</span> <span class="n">fields</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">VkUser</span><span class="o">.</span><span class="n">from_values</span><span class="p">(</span><span class="n">users</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">users</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="VkClient.get_users">
+<a class="viewcode-back" href="../../vk_client.html#vk_client.client.VkClient.get_users">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;about,bdate,city,sex,photo_max&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">VkUser</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieves users info.</span>
+
+<span class="sd">        @see https://dev.vk.com/ru/method/users.get</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user_ids: IDs of VK users.</span>
+<span class="sd">            fields: (optional) List of additional fields to fetch.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of VK user objects.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            vk_api.VkApiError: If VK API responded with an error.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vk_session</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="s1">&#39;users.get&#39;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s1">&#39;user_ids&#39;</span><span class="p">:</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">user_id</span> <span class="ow">in</span> <span class="n">user_ids</span><span class="p">),</span>
+            <span class="s1">&#39;fields&#39;</span><span class="p">:</span> <span class="n">fields</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">VkUser</span><span class="o">.</span><span class="n">from_values</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="VkClient.search_users">
+<a class="viewcode-back" href="../../vk_client.html#vk_client.client.VkClient.search_users">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search_users</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exclude</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">ParamsUsersSearch</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">VkUser</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Searches users.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exclude: (optional) IDs of users to exclude from search.</span>
+<span class="sd">            params: (optional) Parameters to be passed to the search method.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of VK user objects.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            vk_api.VkApiError: If VK API responded with an error.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vk_session</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="s1">&#39;users.search&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">VkUser</span><span class="o">.</span><span class="n">from_values</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">exclude</span> <span class="ow">or</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="VkClient.get_user_photos">
+<a class="viewcode-back" href="../../vk_client.html#vk_client.client.VkClient.get_user_photos">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_user_photos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">top</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Unpack</span><span class="p">[</span><span class="n">ParamsPhotosGet</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">VkPhoto</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns user photos</span>
+
+<span class="sd">        See https://dev.vk.com/ru/method/photos.get</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user_id: ID of VK user to get photos of.</span>
+<span class="sd">            top: (optional) If set, that many photos will be returned,</span>
+<span class="sd">                sorted by count of likes.</span>
+<span class="sd">            params: (optional) Additional method parameters. Default</span>
+<span class="sd">                value for `album_id` is &quot;profile&quot;. If top is not None,</span>
+<span class="sd">                then `extended` is always 1 and `count` is always 1000.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Parsed endpoint response containing photos information.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            VKError: If VK API responded with an error.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;album_id&#39;</span><span class="p">:</span> <span class="s1">&#39;profile&#39;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">params</span><span class="p">,</span>
+            <span class="s1">&#39;owner_id&#39;</span><span class="p">:</span> <span class="n">user_id</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">top</span><span class="p">:</span>
+            <span class="n">values</span><span class="p">[</span><span class="s1">&#39;extended&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">values</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1000</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vk_session</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="s1">&#39;photos.get&#39;</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="n">photos</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">top</span><span class="p">:</span>
+            <span class="n">photos</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">photo</span><span class="p">:</span> <span class="n">photo</span><span class="p">[</span><span class="s1">&#39;likes&#39;</span><span class="p">][</span><span class="s1">&#39;count&#39;</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">photos</span> <span class="o">=</span> <span class="n">photos</span><span class="p">[:</span><span class="n">top</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">VkPhoto</span><span class="o">.</span><span class="n">from_values</span><span class="p">(</span><span class="n">photo</span><span class="p">)</span> <span class="k">for</span> <span class="n">photo</span> <span class="ow">in</span> <span class="n">photos</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="VkClient.like_photo">
+<a class="viewcode-back" href="../../vk_client.html#vk_client.client.VkClient.like_photo">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">like_photo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">photo_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Likes a photo</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            photo_id: Photo ID.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Number of photo likes.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            VKError: If VK API responded with an error.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vk_session</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="s1">&#39;likes.add&#39;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;photo&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="n">photo_id</span><span class="p">,</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;likes&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="VkClient.unlike_photo">
+<a class="viewcode-back" href="../../vk_client.html#vk_client.client.VkClient.unlike_photo">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unlike_photo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">photo_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unlikes a photo</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            photo_id: Photo ID.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Number of photo likes.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            VKError: If VK API responded with an error.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vk_session</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="s1">&#39;likes.delete&#39;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;photo&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="n">photo_id</span><span class="p">,</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;likes&#39;</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, RRS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,864 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vk_client package &mdash; VKinder 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="VKinder API documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            VKinder
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">vk_client package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-vk_client.client">vk_client.client module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.client.VkClient"><code class="docutils literal notranslate"><span class="pre">VkClient</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.client.VkClient.DEFAULT_VERSION"><code class="docutils literal notranslate"><span class="pre">VkClient.DEFAULT_VERSION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.client.VkClient.get_user"><code class="docutils literal notranslate"><span class="pre">VkClient.get_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.client.VkClient.get_user_photos"><code class="docutils literal notranslate"><span class="pre">VkClient.get_user_photos()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.client.VkClient.get_users"><code class="docutils literal notranslate"><span class="pre">VkClient.get_users()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.client.VkClient.like_photo"><code class="docutils literal notranslate"><span class="pre">VkClient.like_photo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.client.VkClient.search_users"><code class="docutils literal notranslate"><span class="pre">VkClient.search_users()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.client.VkClient.unlike_photo"><code class="docutils literal notranslate"><span class="pre">VkClient.unlike_photo()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-vk_client.model">vk_client.model module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.model.ModelBase"><code class="docutils literal notranslate"><span class="pre">ModelBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.ModelBase.from_values"><code class="docutils literal notranslate"><span class="pre">ModelBase.from_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.ModelBase.sanitize_values"><code class="docutils literal notranslate"><span class="pre">ModelBase.sanitize_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.model.VkCounterBase"><code class="docutils literal notranslate"><span class="pre">VkCounterBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkCounterBase.count"><code class="docutils literal notranslate"><span class="pre">VkCounterBase.count</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.model.VkLastSeen"><code class="docutils literal notranslate"><span class="pre">VkLastSeen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkLastSeen.platform"><code class="docutils literal notranslate"><span class="pre">VkLastSeen.platform</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkLastSeen.time"><code class="docutils literal notranslate"><span class="pre">VkLastSeen.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.model.VkPhoto"><code class="docutils literal notranslate"><span class="pre">VkPhoto</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.album_id"><code class="docutils literal notranslate"><span class="pre">VkPhoto.album_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.comments"><code class="docutils literal notranslate"><span class="pre">VkPhoto.comments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.date"><code class="docutils literal notranslate"><span class="pre">VkPhoto.date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.height"><code class="docutils literal notranslate"><span class="pre">VkPhoto.height</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.id"><code class="docutils literal notranslate"><span class="pre">VkPhoto.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.likes"><code class="docutils literal notranslate"><span class="pre">VkPhoto.likes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.owner_id"><code class="docutils literal notranslate"><span class="pre">VkPhoto.owner_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.reposts"><code class="docutils literal notranslate"><span class="pre">VkPhoto.reposts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.sizes"><code class="docutils literal notranslate"><span class="pre">VkPhoto.sizes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.tags"><code class="docutils literal notranslate"><span class="pre">VkPhoto.tags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.text"><code class="docutils literal notranslate"><span class="pre">VkPhoto.text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.user_id"><code class="docutils literal notranslate"><span class="pre">VkPhoto.user_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhoto.width"><code class="docutils literal notranslate"><span class="pre">VkPhoto.width</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.model.VkPhotoCopy"><code class="docutils literal notranslate"><span class="pre">VkPhotoCopy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhotoCopy.height"><code class="docutils literal notranslate"><span class="pre">VkPhotoCopy.height</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhotoCopy.type"><code class="docutils literal notranslate"><span class="pre">VkPhotoCopy.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhotoCopy.url"><code class="docutils literal notranslate"><span class="pre">VkPhotoCopy.url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhotoCopy.width"><code class="docutils literal notranslate"><span class="pre">VkPhotoCopy.width</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.model.VkPhotoLikes"><code class="docutils literal notranslate"><span class="pre">VkPhotoLikes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPhotoLikes.user_likes"><code class="docutils literal notranslate"><span class="pre">VkPhotoLikes.user_likes</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.model.VkPlace"><code class="docutils literal notranslate"><span class="pre">VkPlace</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPlace.id"><code class="docutils literal notranslate"><span class="pre">VkPlace.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkPlace.title"><code class="docutils literal notranslate"><span class="pre">VkPlace.title</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.model.VkUser"><code class="docutils literal notranslate"><span class="pre">VkUser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.about"><code class="docutils literal notranslate"><span class="pre">VkUser.about</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.age"><code class="docutils literal notranslate"><span class="pre">VkUser.age</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.bdate"><code class="docutils literal notranslate"><span class="pre">VkUser.bdate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.can_access_closed"><code class="docutils literal notranslate"><span class="pre">VkUser.can_access_closed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.city"><code class="docutils literal notranslate"><span class="pre">VkUser.city</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.country"><code class="docutils literal notranslate"><span class="pre">VkUser.country</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.first_name"><code class="docutils literal notranslate"><span class="pre">VkUser.first_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.gender"><code class="docutils literal notranslate"><span class="pre">VkUser.gender</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.has_photo"><code class="docutils literal notranslate"><span class="pre">VkUser.has_photo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.id"><code class="docutils literal notranslate"><span class="pre">VkUser.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.is_closed"><code class="docutils literal notranslate"><span class="pre">VkUser.is_closed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.is_friend"><code class="docutils literal notranslate"><span class="pre">VkUser.is_friend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.last_name"><code class="docutils literal notranslate"><span class="pre">VkUser.last_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.last_seen"><code class="docutils literal notranslate"><span class="pre">VkUser.last_seen</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.photo_100"><code class="docutils literal notranslate"><span class="pre">VkUser.photo_100</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.photo_id"><code class="docutils literal notranslate"><span class="pre">VkUser.photo_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.photo_max"><code class="docutils literal notranslate"><span class="pre">VkUser.photo_max</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.relation"><code class="docutils literal notranslate"><span class="pre">VkUser.relation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.sex"><code class="docutils literal notranslate"><span class="pre">VkUser.sex</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.model.VkUser.status"><code class="docutils literal notranslate"><span class="pre">VkUser.status</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-vk_client.params">vk_client.params module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.params.ParamsGeneral"><code class="docutils literal notranslate"><span class="pre">ParamsGeneral</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsGeneral.lang"><code class="docutils literal notranslate"><span class="pre">ParamsGeneral.lang</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsGeneral.test_mode"><code class="docutils literal notranslate"><span class="pre">ParamsGeneral.test_mode</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.album_id"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.album_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.count"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.extended"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.extended</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.feed"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.feed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.feed_type"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.feed_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.lang"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.lang</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.offset"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.offset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.owner_id"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.owner_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.photo_ids"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.photo_ids</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.photo_sizes"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.photo_sizes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.rev"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.rev</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsPhotosGet.test_mode"><code class="docutils literal notranslate"><span class="pre">ParamsPhotosGet.test_mode</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.age_from"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.age_from</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.age_to"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.age_to</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.birth_day"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.birth_day</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.birth_month"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.birth_month</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.birth_year"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.birth_year</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.city"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.city</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.count"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.country"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.country</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.fields"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.has_photo"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.has_photo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.lang"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.lang</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.offset"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.offset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.online"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.online</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.q"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.q</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.sex"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.sex</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.sort"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.sort</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.status"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vk_client.params.ParamsUsersSearch.test_mode"><code class="docutils literal notranslate"><span class="pre">ParamsUsersSearch.test_mode</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-vk_client.types">vk_client.types module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">VKinder</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">vk_client package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/vk_client.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-vk_client">
+<span id="vk-client-package"></span><h1>vk_client package<a class="headerlink" href="#module-vk_client" title="Link to this heading"></a></h1>
+<section id="module-vk_client.client">
+<span id="vk-client-client-module"></span><h2>vk_client.client module<a class="headerlink" href="#module-vk_client.client" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.client.VkClient">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.client.</span></span><span class="sig-name descname"><span class="pre">VkClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vk_client/client.html#VkClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.client.VkClient" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A client for VK API</p>
+<p>See <a class="reference external" href="https://dev.vk.com/ru/reference">https://dev.vk.com/ru/reference</a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.client.VkClient.DEFAULT_VERSION">
+<span class="sig-name descname"><span class="pre">DEFAULT_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'5.199'</span></em><a class="headerlink" href="#vk_client.client.VkClient.DEFAULT_VERSION" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vk_client.client.VkClient.get_user">
+<span class="sig-name descname"><span class="pre">get_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'about,bdate,city,sex,photo_max'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vk_client.model.VkUser" title="vk_client.model.VkUser"><span class="pre">VkUser</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/vk_client/client.html#VkClient.get_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.client.VkClient.get_user" title="Link to this definition"></a></dt>
+<dd><p>Retrieves user info.</p>
+<p>&#64;see <a class="reference external" href="https://dev.vk.com/ru/method/users.get">https://dev.vk.com/ru/method/users.get</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_id</strong> – VK user ID.</p></li>
+<li><p><strong>fields</strong> – (optional) List of additional fields to fetch.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>VK user object.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vk_api.VkApiError</strong> – If VK API responded with an error.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vk_client.client.VkClient.get_user_photos">
+<span class="sig-name descname"><span class="pre">get_user_photos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Unpack</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#vk_client.params.ParamsPhotosGet" title="vk_client.params.ParamsPhotosGet"><span class="pre">ParamsPhotosGet</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#vk_client.model.VkPhoto" title="vk_client.model.VkPhoto"><span class="pre">VkPhoto</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/vk_client/client.html#VkClient.get_user_photos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.client.VkClient.get_user_photos" title="Link to this definition"></a></dt>
+<dd><p>Returns user photos</p>
+<p>See <a class="reference external" href="https://dev.vk.com/ru/method/photos.get">https://dev.vk.com/ru/method/photos.get</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_id</strong> – ID of VK user to get photos of.</p></li>
+<li><p><strong>top</strong> – (optional) If set, that many photos will be returned,
+sorted by count of likes.</p></li>
+<li><p><strong>params</strong> – (optional) Additional method parameters. Default
+value for <cite>album_id</cite> is “profile”. If top is not None,
+then <cite>extended</cite> is always 1 and <cite>count</cite> is always 1000.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Parsed endpoint response containing photos information.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>VKError</strong> – If VK API responded with an error.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vk_client.client.VkClient.get_users">
+<span class="sig-name descname"><span class="pre">get_users</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'about,bdate,city,sex,photo_max'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#vk_client.model.VkUser" title="vk_client.model.VkUser"><span class="pre">VkUser</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/vk_client/client.html#VkClient.get_users"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.client.VkClient.get_users" title="Link to this definition"></a></dt>
+<dd><p>Retrieves users info.</p>
+<p>&#64;see <a class="reference external" href="https://dev.vk.com/ru/method/users.get">https://dev.vk.com/ru/method/users.get</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_ids</strong> – IDs of VK users.</p></li>
+<li><p><strong>fields</strong> – (optional) List of additional fields to fetch.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of VK user objects.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vk_api.VkApiError</strong> – If VK API responded with an error.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vk_client.client.VkClient.like_photo">
+<span class="sig-name descname"><span class="pre">like_photo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/vk_client/client.html#VkClient.like_photo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.client.VkClient.like_photo" title="Link to this definition"></a></dt>
+<dd><p>Likes a photo</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>photo_id</strong> – Photo ID.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of photo likes.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>VKError</strong> – If VK API responded with an error.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vk_client.client.VkClient.search_users">
+<span class="sig-name descname"><span class="pre">search_users</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Unpack</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#vk_client.params.ParamsUsersSearch" title="vk_client.params.ParamsUsersSearch"><span class="pre">ParamsUsersSearch</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#vk_client.model.VkUser" title="vk_client.model.VkUser"><span class="pre">VkUser</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/vk_client/client.html#VkClient.search_users"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.client.VkClient.search_users" title="Link to this definition"></a></dt>
+<dd><p>Searches users.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exclude</strong> – (optional) IDs of users to exclude from search.</p></li>
+<li><p><strong>params</strong> – (optional) Parameters to be passed to the search method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of VK user objects.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vk_api.VkApiError</strong> – If VK API responded with an error.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vk_client.client.VkClient.unlike_photo">
+<span class="sig-name descname"><span class="pre">unlike_photo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/vk_client/client.html#VkClient.unlike_photo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.client.VkClient.unlike_photo" title="Link to this definition"></a></dt>
+<dd><p>Unlikes a photo</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>photo_id</strong> – Photo ID.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of photo likes.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>VKError</strong> – If VK API responded with an error.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-vk_client.model">
+<span id="vk-client-model-module"></span><h2>vk_client.model module<a class="headerlink" href="#module-vk_client.model" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.model.ModelBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.model.</span></span><span class="sig-name descname"><span class="pre">ModelBase</span></span><a class="reference internal" href="_modules/vk_client/model.html#ModelBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.model.ModelBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Base model class</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="vk_client.model.ModelBase.from_values">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vk_client/model.html#ModelBase.from_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.model.ModelBase.from_values" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vk_client.model.ModelBase.sanitize_values">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sanitize_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vk_client/model.html#ModelBase.sanitize_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.model.ModelBase.sanitize_values" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.model.VkCounterBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.model.</span></span><span class="sig-name descname"><span class="pre">VkCounterBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vk_client/model.html#VkCounterBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.model.VkCounterBase" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vk_client.model.ModelBase" title="vk_client.model.ModelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelBase</span></code></a></p>
+<p>Base model for a counter object</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkCounterBase.count">
+<span class="sig-name descname"><span class="pre">count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.model.VkCounterBase.count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.model.VkLastSeen">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.model.</span></span><span class="sig-name descname"><span class="pre">VkLastSeen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vk_client/model.html#VkLastSeen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.model.VkLastSeen" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vk_client.model.ModelBase" title="vk_client.model.ModelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelBase</span></code></a></p>
+<p>VK “last seen” model</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkLastSeen.platform">
+<span class="sig-name descname"><span class="pre">platform</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.model.VkLastSeen.platform" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkLastSeen.time">
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.model.VkLastSeen.time" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.model.</span></span><span class="sig-name descname"><span class="pre">VkPhoto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">album_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owner_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#vk_client.model.VkPhotoCopy" title="vk_client.model.VkPhotoCopy"><span class="pre">VkPhotoCopy</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">likes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#vk_client.model.VkPhotoLikes" title="vk_client.model.VkPhotoLikes"><span class="pre">VkPhotoLikes</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#vk_client.model.VkCounterBase" title="vk_client.model.VkCounterBase"><span class="pre">VkCounterBase</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reposts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#vk_client.model.VkCounterBase" title="vk_client.model.VkCounterBase"><span class="pre">VkCounterBase</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#vk_client.model.VkCounterBase" title="vk_client.model.VkCounterBase"><span class="pre">VkCounterBase</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vk_client/model.html#VkPhoto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.model.VkPhoto" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vk_client.model.ModelBase" title="vk_client.model.ModelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelBase</span></code></a></p>
+<p>VK photo model</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.album_id">
+<span class="sig-name descname"><span class="pre">album_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.album_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.comments">
+<span class="sig-name descname"><span class="pre">comments</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#vk_client.model.VkCounterBase" title="vk_client.model.VkCounterBase"><span class="pre">VkCounterBase</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.comments" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.date">
+<span class="sig-name descname"><span class="pre">date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.height">
+<span class="sig-name descname"><span class="pre">height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.height" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.likes">
+<span class="sig-name descname"><span class="pre">likes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#vk_client.model.VkPhotoLikes" title="vk_client.model.VkPhotoLikes"><span class="pre">VkPhotoLikes</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.likes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.owner_id">
+<span class="sig-name descname"><span class="pre">owner_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.owner_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.reposts">
+<span class="sig-name descname"><span class="pre">reposts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#vk_client.model.VkCounterBase" title="vk_client.model.VkCounterBase"><span class="pre">VkCounterBase</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.reposts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.sizes">
+<span class="sig-name descname"><span class="pre">sizes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#vk_client.model.VkPhotoCopy" title="vk_client.model.VkPhotoCopy"><span class="pre">VkPhotoCopy</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.sizes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.tags">
+<span class="sig-name descname"><span class="pre">tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#vk_client.model.VkCounterBase" title="vk_client.model.VkCounterBase"><span class="pre">VkCounterBase</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.tags" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.text">
+<span class="sig-name descname"><span class="pre">text</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.text" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhoto.width">
+<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkPhoto.width" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.model.VkPhotoCopy">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.model.</span></span><span class="sig-name descname"><span class="pre">VkPhotoCopy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vk_client/model.html#VkPhotoCopy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.model.VkPhotoCopy" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vk_client.model.ModelBase" title="vk_client.model.ModelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelBase</span></code></a></p>
+<p>VK photo copy model</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhotoCopy.height">
+<span class="sig-name descname"><span class="pre">height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.model.VkPhotoCopy.height" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhotoCopy.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#vk_client.model.VkPhotoCopy.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhotoCopy.url">
+<span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#vk_client.model.VkPhotoCopy.url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhotoCopy.width">
+<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.model.VkPhotoCopy.width" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.model.VkPhotoLikes">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.model.</span></span><span class="sig-name descname"><span class="pre">VkPhotoLikes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_likes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vk_client/model.html#VkPhotoLikes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.model.VkPhotoLikes" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vk_client.model.VkCounterBase" title="vk_client.model.VkCounterBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">VkCounterBase</span></code></a></p>
+<p>VK photo likes model</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPhotoLikes.user_likes">
+<span class="sig-name descname"><span class="pre">user_likes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.model.VkPhotoLikes.user_likes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.model.VkPlace">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.model.</span></span><span class="sig-name descname"><span class="pre">VkPlace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vk_client/model.html#VkPlace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.model.VkPlace" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vk_client.model.ModelBase" title="vk_client.model.ModelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelBase</span></code></a></p>
+<p>Base model of a place (city, country) in VK</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPlace.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.model.VkPlace.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkPlace.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#vk_client.model.VkPlace.title" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.model.VkUser">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.model.</span></span><span class="sig-name descname"><span class="pre">VkUser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">can_access_closed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_closed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">about</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bdate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">city</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#vk_client.model.VkPlace" title="vk_client.model.VkPlace"><span class="pre">VkPlace</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#vk_client.model.VkPlace" title="vk_client.model.VkPlace"><span class="pre">VkPlace</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_photo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_friend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_seen</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#vk_client.model.VkLastSeen" title="vk_client.model.VkLastSeen"><span class="pre">VkLastSeen</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_100</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/vk_client/model.html#VkUser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.model.VkUser" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vk_client.model.ModelBase" title="vk_client.model.ModelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelBase</span></code></a></p>
+<p>VK user model</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.about">
+<span class="sig-name descname"><span class="pre">about</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.about" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.age">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">age</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.age" title="Link to this definition"></a></dt>
+<dd><p>Returns user’s age</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>User age (in whole years) or None if user’s birthday is not
+specified.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.bdate">
+<span class="sig-name descname"><span class="pre">bdate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.bdate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.can_access_closed">
+<span class="sig-name descname"><span class="pre">can_access_closed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.can_access_closed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.city">
+<span class="sig-name descname"><span class="pre">city</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#vk_client.model.VkPlace" title="vk_client.model.VkPlace"><span class="pre">VkPlace</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.city" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.country">
+<span class="sig-name descname"><span class="pre">country</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#vk_client.model.VkPlace" title="vk_client.model.VkPlace"><span class="pre">VkPlace</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.country" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.first_name">
+<span class="sig-name descname"><span class="pre">first_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#vk_client.model.VkUser.first_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.gender">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gender</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.gender" title="Link to this definition"></a></dt>
+<dd><p>Returns user’s gender name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Either “male” or “female” string, or None if user’s gender
+is not specified.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.has_photo">
+<span class="sig-name descname"><span class="pre">has_photo</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.has_photo" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.model.VkUser.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.is_closed">
+<span class="sig-name descname"><span class="pre">is_closed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.is_closed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.is_friend">
+<span class="sig-name descname"><span class="pre">is_friend</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.is_friend" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.last_name">
+<span class="sig-name descname"><span class="pre">last_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#vk_client.model.VkUser.last_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.last_seen">
+<span class="sig-name descname"><span class="pre">last_seen</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#vk_client.model.VkLastSeen" title="vk_client.model.VkLastSeen"><span class="pre">VkLastSeen</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.last_seen" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.photo_100">
+<span class="sig-name descname"><span class="pre">photo_100</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.photo_100" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.photo_id">
+<span class="sig-name descname"><span class="pre">photo_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.photo_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.photo_max">
+<span class="sig-name descname"><span class="pre">photo_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.photo_max" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.relation">
+<span class="sig-name descname"><span class="pre">relation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.relation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.sex">
+<span class="sig-name descname"><span class="pre">sex</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.sex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.model.VkUser.status">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#vk_client.model.VkUser.status" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-vk_client.params">
+<span id="vk-client-params-module"></span><h2>vk_client.params module<a class="headerlink" href="#module-vk_client.params" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.params.ParamsGeneral">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.params.</span></span><span class="sig-name descname"><span class="pre">ParamsGeneral</span></span><a class="reference internal" href="_modules/vk_client/params.html#ParamsGeneral"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.params.ParamsGeneral" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>General VK API parameters</p>
+<p>See <a class="reference external" href="https://dev.vk.com/en/api/api-requests#General%20parameters">https://dev.vk.com/en/api/api-requests#General%20parameters</a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsGeneral.lang">
+<span class="sig-name descname"><span class="pre">lang</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeLang</span></em><a class="headerlink" href="#vk_client.params.ParamsGeneral.lang" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsGeneral.test_mode">
+<span class="sig-name descname"><span class="pre">test_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeBoolean</span></em><a class="headerlink" href="#vk_client.params.ParamsGeneral.test_mode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.params.</span></span><span class="sig-name descname"><span class="pre">ParamsPhotosGet</span></span><a class="reference internal" href="_modules/vk_client/params.html#ParamsPhotosGet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.params.ParamsPhotosGet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vk_client.params.ParamsGeneral" title="vk_client.params.ParamsGeneral"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParamsGeneral</span></code></a></p>
+<p>VK API: photos.get parameters</p>
+<p>See <a class="reference external" href="https://dev.vk.com/en/method/photos.get#Parameters">https://dev.vk.com/en/method/photos.get#Parameters</a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.album_id">
+<span class="sig-name descname"><span class="pre">album_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.album_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.count">
+<span class="sig-name descname"><span class="pre">count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.extended">
+<span class="sig-name descname"><span class="pre">extended</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeBoolean</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.extended" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.feed">
+<span class="sig-name descname"><span class="pre">feed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.feed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.feed_type">
+<span class="sig-name descname"><span class="pre">feed_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.feed_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.lang">
+<span class="sig-name descname"><span class="pre">lang</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeLang</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.lang" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.offset">
+<span class="sig-name descname"><span class="pre">offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.offset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.owner_id">
+<span class="sig-name descname"><span class="pre">owner_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.owner_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.photo_ids">
+<span class="sig-name descname"><span class="pre">photo_ids</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.photo_ids" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.photo_sizes">
+<span class="sig-name descname"><span class="pre">photo_sizes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeBoolean</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.photo_sizes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.rev">
+<span class="sig-name descname"><span class="pre">rev</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeBoolean</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.rev" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsPhotosGet.test_mode">
+<span class="sig-name descname"><span class="pre">test_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeBoolean</span></em><a class="headerlink" href="#vk_client.params.ParamsPhotosGet.test_mode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vk_client.params.</span></span><span class="sig-name descname"><span class="pre">ParamsUsersSearch</span></span><a class="reference internal" href="_modules/vk_client/params.html#ParamsUsersSearch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#vk_client.params.ParamsUsersSearch" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#vk_client.params.ParamsGeneral" title="vk_client.params.ParamsGeneral"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParamsGeneral</span></code></a></p>
+<p>VK API: users.search parameters</p>
+<p>See <a class="reference external" href="https://dev.vk.com/en/method/users.search#Parameters">https://dev.vk.com/en/method/users.search#Parameters</a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.age_from">
+<span class="sig-name descname"><span class="pre">age_from</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.age_from" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.age_to">
+<span class="sig-name descname"><span class="pre">age_to</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.age_to" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.birth_day">
+<span class="sig-name descname"><span class="pre">birth_day</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.birth_day" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.birth_month">
+<span class="sig-name descname"><span class="pre">birth_month</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.birth_month" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.birth_year">
+<span class="sig-name descname"><span class="pre">birth_year</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.birth_year" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.city">
+<span class="sig-name descname"><span class="pre">city</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.city" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.count">
+<span class="sig-name descname"><span class="pre">count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.country">
+<span class="sig-name descname"><span class="pre">country</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.country" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.has_photo">
+<span class="sig-name descname"><span class="pre">has_photo</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeBoolean</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.has_photo" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.lang">
+<span class="sig-name descname"><span class="pre">lang</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeLang</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.lang" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.offset">
+<span class="sig-name descname"><span class="pre">offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.offset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.online">
+<span class="sig-name descname"><span class="pre">online</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeBoolean</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.online" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.q">
+<span class="sig-name descname"><span class="pre">q</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.q" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.sex">
+<span class="sig-name descname"><span class="pre">sex</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeSex</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.sex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.sort">
+<span class="sig-name descname"><span class="pre">sort</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeSort</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.sort" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.status">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeStatus</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.status" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vk_client.params.ParamsUsersSearch.test_mode">
+<span class="sig-name descname"><span class="pre">test_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeBoolean</span></em><a class="headerlink" href="#vk_client.params.ParamsUsersSearch.test_mode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-vk_client.types">
+<span id="vk-client-types-module"></span><h2>vk_client.types module<a class="headerlink" href="#module-vk_client.types" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="VKinder API documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, RRS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
