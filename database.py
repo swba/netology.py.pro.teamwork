@@ -18,16 +18,38 @@ class Database:
     """Класс для работы с базой данных PostgreSQL"""
 
     def __init__(self) -> None:
-        """Инициализация подключения к БД и создание таблиц"""
-        self.conn = psycopg2.connect(
-            dbname=os.getenv('DB_NAME'),
-            user=os.getenv('DB_USER'),
-            password=os.getenv('DB_PASSWORD'),
-            host=os.getenv('DB_HOST')
-        )
-        self.cur = self.conn.cursor(cursor_factory=DictCursor)
-        self._create_tables()
-        self._create_cache_table()
+        """Инициализация подключения к БД с проверкой"""
+        try:
+            self.conn = psycopg2.connect(
+                dbname=os.getenv('DB_NAME'),
+                user=os.getenv('DB_USER'),
+                password=os.getenv('DB_PASSWORD'),
+                host=os.getenv('DB_HOST')
+            )
+            self.cur = self.conn.cursor(cursor_factory=DictCursor)
+
+            # Проверка подключения
+            self.cur.execute("SELECT 1")
+            self.conn.commit()
+
+            logger.info("✅ Успешное подключение к PostgreSQL (версия: %s)",
+                        self.conn.server_version)
+
+            self._create_tables()
+            self._create_cache_table()
+
+        except Exception as e:
+            logger.critical("❌ Ошибка подключения к PostgreSQL: %s", e)
+            raise RuntimeError(f"Database connection failed: {e}")
+
+    def check_connection(self) -> bool:
+        """Проверяет активность подключения к БД"""
+        try:
+            self.cur.execute("SELECT 1")
+            return True
+        except Exception as e:
+            logger.error("Соединение с PostgreSQL разорвано: %s", e)
+            return False
 
     def _create_tables(self) -> None:
         """Создает необходимые таблицы в БД если они не существуют"""
@@ -129,24 +151,44 @@ class Database:
             logger.error(f"Error caching results: {e}")
 
     def add_user(self, vk_id: int, first_name: str, last_name: str,
-                 age: int, sex: str, city: str) -> None:
+                 age: Optional[int] = None, sex: Optional[str] = None,
+                 city: Optional[str] = None) -> bool:
         """
-        Добавляет пользователя в БД
+        Добавляет пользователя в БД или обновляет существующего
 
-        Args:
-            vk_id: ID пользователя VK
-            first_name: Имя
-            last_name: Фамилия
-            age: Возраст
-            sex: Пол
-            city: Город
+        Returns:
+            True если пользователь добавлен/обновлен, False при ошибке
         """
-        self.cur.execute("""
-            INSERT INTO Users (vk_id, first_name, last_name, age, sex, city)
-            VALUES (%s, %s, %s, %s, %s, %s)
-            ON CONFLICT (vk_id) DO NOTHING;
-        """, (vk_id, first_name, last_name, age, sex, city))
-        self.conn.commit()
+        try:
+            self.cur.execute("""
+                INSERT INTO Users (vk_id, first_name, last_name, age, sex, city)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                ON CONFLICT (vk_id) 
+                DO UPDATE SET 
+                    first_name = EXCLUDED.first_name,
+                    last_name = EXCLUDED.last_name,
+                    age = COALESCE(EXCLUDED.age, Users.age),
+                    sex = COALESCE(EXCLUDED.sex, Users.sex),
+                    city = COALESCE(EXCLUDED.city, Users.city)
+                RETURNING 1;
+            """, (vk_id, first_name, last_name, age, sex, city))
+            self.conn.commit()
+            return bool(self.cur.fetchone())
+        except Exception as e:
+            self.conn.rollback()
+            logger.error(f"Error adding user {vk_id}: {e}")
+            return False
+
+    def user_exists(self, vk_id: int) -> bool:
+        """Проверяет существует ли пользователь в БД"""
+        try:
+            self.cur.execute("""
+                SELECT 1 FROM Users WHERE vk_id = %s
+            """, (vk_id,))
+            return bool(self.cur.fetchone())
+        except Exception as e:
+            logger.error(f"Error checking user {vk_id}: {e}")
+            return False
 
     def add_favorite(self, user_id: int, favorite_vk_id: int) -> bool:
         """
@@ -251,21 +293,23 @@ class Database:
             return []
 
     def check_blacklist(self, user_id: int, target_vk_id: int) -> bool:
-        """
-        Проверяет находится ли пользователь в черном списке
+        """Проверяет наличие пользователя в ЧС"""
+        try:
+            # Автоматически создаем записи если пользователей нет
+            if not self.user_exists(user_id):
+                self.add_user(user_id, "", "", None, None, None)
 
-        Args:
-            user_id: ID пользователя VK
-            target_vk_id: ID проверяемого пользователя
+            if not self.user_exists(target_vk_id):
+                self.add_user(target_vk_id, "", "", None, None, None)
 
-        Returns:
-            True если пользователь в черном списке, иначе False
-        """
-        self.cur.execute("""
-            SELECT 1 FROM Blacklist
-            WHERE user_id = %s AND blocked_vk_id = %s;
-        """, (user_id, target_vk_id))
-        return self.cur.fetchone() is not None
+            self.cur.execute("""
+                SELECT 1 FROM Blacklist
+                WHERE user_id = %s AND blocked_vk_id = %s
+            """, (user_id, target_vk_id))
+            return bool(self.cur.fetchone())
+        except Exception as e:
+            logger.error(f"Error checking blacklist: {e}")
+            return False
 
     def close(self) -> None:
         """Закрывает соединение с БД"""

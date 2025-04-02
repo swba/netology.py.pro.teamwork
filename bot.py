@@ -24,8 +24,6 @@ class Bot:
     def __init__(self) -> None:
         """Инициализация бота с проверкой токенов"""
         load_dotenv()
-
-        # Проверка наличия всех необходимых переменных
         self._check_env_vars()
 
         try:
@@ -33,26 +31,37 @@ class Bot:
             self.vk_session = VkApi(token=os.getenv('VK_TOKEN_GROUP'))
             self.vk = self.vk_session.get_api()
 
-            # Проверка валидности группового токена
-            self._check_group_token()
+            # Проверка подключения к VK API
+            self._check_vk_connection()
 
             # Инициализация LongPoll
             self.longpoll = VkLongPoll(self.vk_session)
 
+            logger.info("✅ LongPoll инициализирован")
+
             # Инициализация базы данных
             self.db = Database()
+            logger.info(f"🛢️ Подключено к PostgreSQL: {os.getenv('DB_NAME')}")
 
-            # Инициализация обработчика VK с пользовательским токеном
+            # Инициализация обработчика VK
             self.vk_handler = VKHandler(os.getenv('VK_TOKEN_USER'), db=self.db)
 
             # Словарь для хранения состояний пользователей
             self.user_states = {}
 
-            logger.info("Бот успешно инициализирован")
-
         except Exception as e:
             logger.critical(f"Ошибка инициализации бота: {e}")
             raise
+
+    def _check_vk_connection(self):  # <-- Добавьте этот метод
+        """Проверяет подключение к VK API"""
+        try:
+            group_info = self.vk.groups.getById()
+            logger.info(f"✅ Успешное подключение к группе: {group_info[0]['name']}")
+            return True
+        except Exception as e:
+            logger.critical(f"❌ Ошибка подключения к VK API: {e}")
+            raise RuntimeError(f"VK API connection failed: {e}")
 
     def _check_env_vars(self):
         """Проверка наличия всех необходимых переменных окружения"""
@@ -103,12 +112,9 @@ class Bot:
                 except KeyboardInterrupt:
                     logger.info("Бот остановлен пользователем")
                     break
-                except ApiError as e:
+                except Exception as e:
                     logger.error(f"Ошибка LongPoll: {e}")
                     time.sleep(10)
-                except Exception as e:
-                    logger.error(f"Неизвестная ошибка: {e}")
-                    time.sleep(30)
 
         finally:
             logger.info("Завершение работы бота")
