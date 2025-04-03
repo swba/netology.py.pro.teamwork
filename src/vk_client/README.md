@@ -4,8 +4,9 @@
 предоставляет соответствующий класс `VkClient`.
 
 Пример использования:
+
 ```python
-from vk_client import VkClient
+from src.vk_client import VkClient
 
 vk_client = VkClient('VK_API_TOKEN')
 
@@ -19,7 +20,7 @@ if vk_user.age:
     print(f'Возраст: {vk_user.age}')
 # Получаем пол пользователя (может быть пустым).
 if vk_user.gender:
-    print(f"Пол: {'Мужской' if vk_user.gender == 'male' else 'Женский'}")
+    print(vk_user.gender)
 # Получаем город пользователя (может быть пустым):
 if vk_user.city:
     print(f'Город: {vk_user.city.title} (#{vk_user.city.id})')

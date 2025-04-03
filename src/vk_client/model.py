@@ -1,7 +1,8 @@
 from abc import ABC
 from dataclasses import dataclass
-from datetime import datetime
 from typing import Dict, List, Optional
+
+from src.utils import get_age, get_gender
 
 
 class ModelBase(ABC):
@@ -71,24 +72,17 @@ class VkUser(ModelBase):
             specified.
 
         """
-        if self.bdate and self.bdate.count('.') == 2:
-            if dt := datetime.strptime(self.bdate, '%d.%m.%Y'):
-                # @see https://stackoverflow.com/a/9754466/5111076
-                today = datetime.today()
-                return today.year - dt.year - ((today.month, today.day) < (dt.month, dt.day))
+        return get_age(self.bdate)
 
     @property
     def gender(self) -> Optional[str]:
         """Returns user's gender name
 
         Returns:
-            Either "male" or "female" string, or None if user's gender
-            is not specified.
+            User's gender name.
 
         """
-        if self.sex:
-            return 'male' if self.sex == 2 else 'female'
-        return None
+        return get_gender(self.sex)
 
 
 @dataclass

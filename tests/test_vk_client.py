@@ -1,7 +1,7 @@
 from environs import env
 import pytest
 
-from vk_client import VkClient
+from src.vk_client import VkClient
 
 
 TEST_USERS = [

@@ -1,5 +1,5 @@
 pytest~=8.3.5
 environs~=14.1.1
 vk-api~=11.9.9
-sphinx~=8.3.0
-sphinx-rtd-theme~=3.0.2
+psycopg~=3.2.6
+SQLAlchemy~=2.0.40
