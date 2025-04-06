@@ -100,98 +100,70 @@ class VKHandler:
             logger.error(f"Search error: {e}")
             return []
 
-    def get_photos(self, user_id: int, count: int = 5) -> List[Dict]:
-        """Получает топ фотографий пользователя"""
+    def get_photos(self, user_id: int) -> List[Dict]:
+        """Безопасное получение фото (работает даже без прав на tagged)"""
         try:
-            # Получаем все доступные фото пользователя
-            all_photos = []
+            # Основные фото профиля
+            profile_photos = self.vk.photos.get(
+                owner_id=user_id,
+                album_id='profile',
+                extended=1,
+                count=30
+            ).get('items', [])
 
-            # 1. Попробуем получить фото профиля (wall)
-            try:
-                profile_photos = self.vk.photos.get(
-                    owner_id=user_id,
-                    album_id='wall',
-                    extended=1,
-                    count=100,
-                    photo_sizes=1
-                ).get('items', [])
-                all_photos.extend(profile_photos)
-            except ApiError as e:
-                logger.warning(f"Couldn't get wall photos: {e}")
-
-            # 2. Попробуем получить фото со страницы (profile)
-            try:
-                profile_photos = self.vk.photos.get(
-                    owner_id=user_id,
-                    album_id='profile',
-                    extended=1,
-                    count=100,
-                    photo_sizes=1
-                ).get('items', [])
-                all_photos.extend(profile_photos)
-            except ApiError as e:
-                logger.warning(f"Couldn't get profile photos: {e}")
-
-            # 3. Попробуем получить фото, где пользователь отмечен
+            # Пытаемся получить фото с отметками (если есть права)
+            tagged_photos = []
             try:
                 tagged_photos = self.vk.photos.getUserPhotos(
                     user_id=user_id,
                     extended=1,
-                    count=100,
-                    photo_sizes=1
+                    count=30
                 ).get('items', [])
-                all_photos.extend(tagged_photos)
             except ApiError as e:
-                logger.warning(f"Couldn't get tagged photos: {e}")
+                logger.debug(f"No access to tagged photos: {e}")
 
-            # Если совсем не получили фото, пробуем просто последние загруженные
-            if not all_photos:
-                try:
-                    all_photos = self.vk.photos.getAll(
-                        owner_id=user_id,
-                        extended=1,
-                        count=100,
-                        photo_sizes=1
-                    ).get('items', [])
-                except ApiError as e:
-                    logger.error(f"Couldn't get any photos: {e}")
-                    return []
+            # Объединяем и сортируем
+            all_photos = sorted(
+                profile_photos + tagged_photos,
+                key=lambda x: x.get('likes', {}).get('count', 0),
+                reverse=True
+            )
 
-            # Сортируем по количеству лайков и выбираем топ
-            all_photos.sort(key=lambda x: x.get('likes', {}).get('count', 0), reverse=True)
-
-            # Формируем результат
-            result = []
-            for photo in all_photos[:count]:
-                # Выбираем фото максимального размера
-                sizes = photo.get('sizes', [])
-                if sizes:
-                    max_size = max(sizes, key=lambda s: s.get('width', 0) * s.get('height', 0))
-                    photo_url = max_size.get('url', '')
-                else:
-                    photo_url = ''
-
-                result.append({
-                    'id': photo.get('id'),
-                    'owner_id': photo.get('owner_id'),
-                    'url': photo_url,
-                    'likes': photo.get('likes', {}).get('count', 0)
-                })
-
-            return result
+            return all_photos[:3]  # Топ-3 фото
 
         except Exception as e:
-            logger.error(f"Photos error: {e}")
+            logger.error(f"Error getting photos: {e}")
             return []
 
-    def like_photo(self, photo_id: int, owner_id: int) -> bool:
-        """Ставит лайк на фото"""
+    def like_photo(self, photo_id: int, owner_id: int, user_id: int) -> bool:
+        """
+        Ставит лайк на фото и сохраняет информацию в БД
+
+        Args:
+            photo_id: ID фотографии
+            owner_id: ID владельца фото
+            user_id: ID пользователя, который ставит лайк
+
+        Returns:
+            True если лайк успешно поставлен, иначе False
+        """
         try:
+            # Проверяем, не ставили ли уже лайк
+            if self.db and self.db.has_liked_photo(user_id, photo_id):
+                logger.info(f"User {user_id} already liked photo {photo_id}")
+                return False
+
+            # Ставим лайк через API
             self.vk.likes.add(
                 type='photo',
                 owner_id=owner_id,
                 item_id=photo_id
             )
+
+            # Сохраняем информацию о лайке в БД
+            if self.db:
+                self.db.add_like(user_id, owner_id, photo_id)
+
             return True
         except ApiError as e:
             logger.error(f"API like error: {e}")

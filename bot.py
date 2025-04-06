@@ -24,8 +24,6 @@ class Bot:
     def __init__(self) -> None:
         """Инициализация бота с проверкой токенов"""
         load_dotenv()
-
-        # Проверка наличия всех необходимых переменных
         self._check_env_vars()
 
         try:
@@ -33,26 +31,37 @@ class Bot:
             self.vk_session = VkApi(token=os.getenv('VK_TOKEN_GROUP'))
             self.vk = self.vk_session.get_api()
 
-            # Проверка валидности группового токена
-            self._check_group_token()
+            # Проверка подключения к VK API
+            self._check_vk_connection()
 
             # Инициализация LongPoll
             self.longpoll = VkLongPoll(self.vk_session)
 
+            logger.info("✅ LongPoll инициализирован")
+
             # Инициализация базы данных
             self.db = Database()
+            logger.info(f"🛢️ Подключено к PostgreSQL: {os.getenv('DB_NAME')}")
 
-            # Инициализация обработчика VK с пользовательским токеном
+            # Инициализация обработчика VK
             self.vk_handler = VKHandler(os.getenv('VK_TOKEN_USER'), db=self.db)
 
             # Словарь для хранения состояний пользователей
             self.user_states = {}
 
-            logger.info("Бот успешно инициализирован")
-
         except Exception as e:
             logger.critical(f"Ошибка инициализации бота: {e}")
             raise
+
+    def _check_vk_connection(self):  # <-- Добавьте этот метод
+        """Проверяет подключение к VK API"""
+        try:
+            group_info = self.vk.groups.getById()
+            logger.info(f"✅ Успешное подключение к группе: {group_info[0]['name']}")
+            return True
+        except Exception as e:
+            logger.critical(f"❌ Ошибка подключения к VK API: {e}")
+            raise RuntimeError(f"VK API connection failed: {e}")
 
     def _check_env_vars(self):
         """Проверка наличия всех необходимых переменных окружения"""
@@ -103,12 +112,9 @@ class Bot:
                 except KeyboardInterrupt:
                     logger.info("Бот остановлен пользователем")
                     break
-                except ApiError as e:
+                except Exception as e:
                     logger.error(f"Ошибка LongPoll: {e}")
                     time.sleep(10)
-                except Exception as e:
-                    logger.error(f"Неизвестная ошибка: {e}")
-                    time.sleep(30)
 
         finally:
             logger.info("Завершение работы бота")
@@ -172,16 +178,19 @@ class Bot:
 
         Обрабатывает следующие типы действий:
         - add_fav: добавление пользователя в избранное
-        - like: лайк фотографии
+        - like: лайк фотографии (с проверкой дублирования)
         - next: показать следующего пользователя
         - block: добавление пользователя в черный список
         """
         try:
             # Проверка валидности payload
-            if not isinstance(payload, dict):
+            if not payload or not isinstance(payload, dict):
                 logger.error(f"Получен некорректный payload: {payload}")
                 self._send_message(user_id, "❌ Ошибка: неверный формат действия")
                 return
+
+            # Логирование полученного payload для отладки
+            logger.debug(f"Обработка payload от user_id={user_id}: {payload}")
 
             action = payload.get('type')
             if not action:
@@ -191,62 +200,127 @@ class Bot:
 
             # Обработка разных типов действий
             if action == "add_fav":
-                if 'user_id' not in payload:
-                    logger.error(f"Отсутствует user_id в add_fav: {payload}")
-                    self._send_message(user_id, "❌ Ошибка: не указан пользователь")
-                    return
-
-                fav_id = payload['user_id']
-                if self.db.add_favorite(user_id, fav_id):
-                    self._send_message(user_id, "✅ Пользователь добавлен в избранное!")
-                else:
-                    self._send_message(user_id, "⚠️ Пользователь уже в избранном")
+                self._handle_add_favorite(user_id, payload)
 
             elif action == "like":
-                if 'photo_id' not in payload:
-                    logger.error(f"Отсутствует photo_id в like: {payload}")
-                    self._send_message(user_id, "❌ Ошибка: не указана фотография")
-                    return
-
-                photo_id = payload['photo_id']
-                owner_id = payload.get('owner_id', payload.get('user_id'))
-
-                if not owner_id:
-                    logger.error(f"Отсутствует owner_id в like: {payload}")
-                    self._send_message(user_id, "❌ Ошибка: не указан владелец фото")
-                    return
-
-                if self.vk_handler.like_photo(photo_id, owner_id):
-                    self._send_message(user_id, "❤️ Лайк поставлен!")
-                else:
-                    self._send_message(user_id, "❌ Не удалось поставить лайк")
+                self._handle_like(user_id, payload)
 
             elif action == "next":
-                self._show_next_user(user_id)
+                self._handle_next_user(user_id)
 
             elif action == "block":
-                if 'user_id' not in payload:
-                    logger.error(f"Отсутствует user_id в block: {payload}")
-                    self._send_message(user_id, "❌ Ошибка: не указан пользователь")
-                    return
-
-                block_id = payload['user_id']
-                if self.db.add_to_blacklist(user_id, block_id):
-                    self._send_message(user_id, "🚫 Пользователь добавлен в ЧС")
-                    self._show_next_user(user_id)
-                else:
-                    self._send_message(user_id, "⚠️ Пользователь уже в ЧС")
+                self._handle_block(user_id, payload)
 
             else:
                 logger.error(f"Неизвестный тип действия: {action}")
                 self._send_message(user_id, "⚠️ Неизвестное действие")
 
+        except json.JSONDecodeError:
+            logger.error(f"Ошибка декодирования JSON в payload: {payload}")
+            self._send_message(user_id, "❌ Ошибка: неверный формат данных")
         except KeyError as e:
             logger.error(f"Отсутствует обязательное поле в payload: {e}")
-            self._send_message(user_id, "❌ Ошибка: неверные данные действия")
+            self._send_message(user_id, f"❌ Ошибка: отсутствует поле {e}")
         except Exception as e:
             logger.error(f"Критическая ошибка обработки payload: {e}", exc_info=True)
             self._send_message(user_id, "❌ Произошла ошибка при обработке действия")
+
+    def _handle_add_favorite(self, user_id: int, payload: Dict) -> None:
+        """Обрабатывает добавление в избранное"""
+        if 'user_id' not in payload:
+            logger.error(f"Отсутствует user_id в add_fav: {payload}")
+            self._send_message(user_id, "❌ Ошибка: не указан пользователь")
+            return
+
+        fav_id = payload['user_id']
+        try:
+            # Получаем информацию о пользователе для сообщения
+            fav_info = self.vk_handler.get_user_info(fav_id)
+            name = f"{fav_info.get('first_name', '')} {fav_info.get('last_name', '')}" if fav_info else "Пользователь"
+
+            # Проверяем, есть ли уже в избранном
+            favorites = self.db.get_favorites(user_id)
+            if fav_id in favorites:
+                self._send_message(user_id, f"ℹ️ {name} уже в вашем избранном")
+                return
+
+            # Пытаемся добавить
+            if self.db.add_favorite(user_id, fav_id):
+                self._send_message(user_id, f"✅ {name} добавлен(а) в избранное!")
+            else:
+                self._send_message(user_id, "❌ Ошибка при добавлении в избранное")
+
+        except Exception as e:
+            logger.error(f"Ошибка добавления в избранное: {e}")
+            self._send_message(user_id, "❌ Ошибка при добавлении в избранное")
+
+    def _handle_like(self, user_id: int, payload: Dict) -> None:
+        """Обрабатывает лайк фотографии"""
+        required_fields = ['photo_id', 'owner_id']
+        missing = [field for field in required_fields if field not in payload]
+        if missing:
+            logger.error(f"Отсутствуют поля в like: {missing}")
+            self._send_message(user_id, f"❌ Ошибка: отсутствуют поля {', '.join(missing)}")
+            return
+
+        photo_id = payload['photo_id']
+        owner_id = payload['owner_id']
+
+        try:
+            # Проверяем, не ставил ли уже лайк
+            if self.db.has_liked_photo(user_id, photo_id):
+                self._send_message(user_id, "❤️ Вы уже лайкали это фото ранее!")
+                return
+
+            # Ставим лайк через VK API и сохраняем в БД
+            if self.vk_handler.like_photo(photo_id, owner_id, user_id):
+                # Получаем информацию о владельце фото для красивого сообщения
+                user_info = self.vk_handler.get_user_info(owner_id)
+                name = f"{user_info.get('first_name', 'Пользователь')}" if user_info else "Пользователю"
+                self._send_message(user_id, f"❤️ Лайк {name} успешно поставлен!")
+            else:
+                self._send_message(user_id, "❌ Не удалось поставить лайк")
+        except ApiError as e:
+            if e.code == 15:  # Access denied
+                self._send_message(user_id, "❌ Невозможно поставить лайк (доступ запрещен)")
+            else:
+                logger.error(f"API error in like: {e}")
+                self._send_message(user_id, "❌ Ошибка API при постановке лайка")
+        except Exception as e:
+            logger.error(f"Ошибка обработки лайка: {e}")
+            self._send_message(user_id, "❌ Ошибка при обработке лайка")
+
+    def _handle_next_user(self, user_id: int) -> None:
+        """Обрабатывает запрос на следующего пользователя"""
+        try:
+            self._show_next_user(user_id)
+        except Exception as e:
+            logger.error(f"Ошибка переключения пользователя: {e}")
+            self._send_message(user_id, "❌ Ошибка при поиске следующего пользователя")
+
+    def _handle_block(self, user_id: int, payload: Dict) -> None:
+        """Обрабатывает добавление в черный список"""
+        if 'user_id' not in payload:
+            logger.error(f"Отсутствует user_id в block: {payload}")
+            self._send_message(user_id, "❌ Ошибка: не указан пользователь")
+            return
+
+        block_id = payload['user_id']
+        try:
+            if self.db.add_to_blacklist(user_id, block_id):
+                # Получаем информацию о заблокированном пользователе
+                block_info = self.vk_handler.get_user_info(block_id)
+                if block_info:
+                    name = f"{block_info.get('first_name', '')} {block_info.get('last_name', '')}"
+                    self._send_message(user_id, f"🚫 {name} добавлен(а) в ЧС")
+                else:
+                    self._send_message(user_id, "🚫 Пользователь добавлен в ЧС")
+                self._show_next_user(user_id)
+            else:
+                self._send_message(user_id, "⚠️ Пользователь уже в ЧС")
+        except Exception as e:
+            logger.error(f"Ошибка добавления в ЧС: {e}")
+            self._send_message(user_id, "❌ Ошибка при добавлении в ЧС")
 
     def _handle_text(self, user_id: int, text: str) -> None:
         """Обрабатывает текстовые команды"""
