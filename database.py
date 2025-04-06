@@ -37,10 +37,117 @@ class Database:
 
             self._create_tables()
             self._create_cache_table()
+            self._create_likes_table()  # Добавляем таблицу для лайков
 
         except Exception as e:
             logger.critical("❌ Ошибка подключения к PostgreSQL: %s", e)
             raise RuntimeError(f"Database connection failed: {e}")
+
+    def _create_likes_table(self) -> None:
+        """Создает таблицу для хранения информации о лайках"""
+        self.cur.execute("""
+            CREATE TABLE IF NOT EXISTS Likes (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER NOT NULL REFERENCES Users(vk_id),
+                liked_user_id INTEGER NOT NULL,
+                photo_id INTEGER NOT NULL,
+                liked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, photo_id)  -- Один лайк на фото от пользователя
+            );
+        """)
+        self.conn.commit()
+
+    def add_like(self, user_id: int, liked_user_id: int, photo_id: int) -> bool:
+        """
+        Добавляет информацию о лайке в базу данных
+
+        Args:
+            user_id: ID пользователя, который поставил лайк
+            liked_user_id: ID пользователя, которому поставили лайк
+            photo_id: ID фотографии, которой поставили лайк
+
+        Returns:
+            True если лайк успешно добавлен, False если уже существует
+        """
+        try:
+            # Проверяем существование пользователей
+            self.cur.execute("SELECT 1 FROM Users WHERE vk_id = %s", (user_id,))
+            if not self.cur.fetchone():
+                logger.error(f"User {user_id} not found")
+                return False
+
+            self.cur.execute("SELECT 1 FROM Users WHERE vk_id = %s", (liked_user_id,))
+            if not self.cur.fetchone():
+                logger.error(f"Liked user {liked_user_id} not found")
+                return False
+
+            # Добавляем лайк
+            self.cur.execute("""
+                INSERT INTO Likes (user_id, liked_user_id, photo_id)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (user_id, photo_id) DO NOTHING
+                RETURNING 1;
+            """, (user_id, liked_user_id, photo_id))
+
+            self.conn.commit()
+            return bool(self.cur.fetchone())
+
+        except Exception as e:
+            self.conn.rollback()
+            logger.error(f"Error adding like: {e}")
+            return False
+
+    def get_user_likes(self, user_id: int) -> List[Dict]:
+        """
+        Получает список лайков пользователя
+
+        Args:
+            user_id: ID пользователя VK
+
+        Returns:
+            Список словарей с информацией о лайках
+        """
+        try:
+            self.cur.execute("""
+                SELECT liked_user_id, photo_id, liked_at 
+                FROM Likes 
+                WHERE user_id = %s
+                ORDER BY liked_at DESC;
+            """, (user_id,))
+
+            return [
+                {
+                    'liked_user_id': row['liked_user_id'],
+                    'photo_id': row['photo_id'],
+                    'liked_at': row['liked_at']
+                }
+                for row in self.cur.fetchall()
+            ]
+        except Exception as e:
+            logger.error(f"Error getting user likes: {e}")
+            return []
+
+    def has_liked_photo(self, user_id: int, photo_id: int) -> bool:
+        """
+        Проверяет, лайкал ли пользователь данную фотографию
+
+        Args:
+            user_id: ID пользователя VK
+            photo_id: ID фотографии
+
+        Returns:
+            True если лайк уже был поставлен, иначе False
+        """
+        try:
+            self.cur.execute("""
+                SELECT 1 FROM Likes 
+                WHERE user_id = %s AND photo_id = %s;
+            """, (user_id, photo_id))
+
+            return bool(self.cur.fetchone())
+        except Exception as e:
+            logger.error(f"Error checking like: {e}")
+            return False
 
     def check_connection(self) -> bool:
         """Проверяет активность подключения к БД"""
@@ -200,32 +307,39 @@ class Database:
 
         Returns:
             True если добавление успешно, False если пользователь уже в избранном
+            или произошла ошибка
         """
         try:
-            # Проверяем существование пользователя, который добавляет
+            # Проверяем существование пользователей
             self.cur.execute("SELECT 1 FROM Users WHERE vk_id = %s", (user_id,))
             if not self.cur.fetchone():
                 logger.error(f"User {user_id} not found in database")
                 return False
 
-            # Проверяем существование пользователя, которого добавляют
             self.cur.execute("SELECT 1 FROM Users WHERE vk_id = %s", (favorite_vk_id,))
             if not self.cur.fetchone():
                 logger.error(f"Favorite user {favorite_vk_id} not found in database")
                 return False
 
-            # Пробуем добавить в избранное
+            # Проверяем, есть ли уже в избранном
             self.cur.execute("""
-                    INSERT INTO Favorites (user_id, favorite_vk_id)
-                    VALUES (%s, %s)
-                """, (user_id, favorite_vk_id))
+                SELECT 1 FROM Favorites 
+                WHERE user_id = %s AND favorite_vk_id = %s
+            """, (user_id, favorite_vk_id))
+
+            if self.cur.fetchone():
+                logger.info(f"User {favorite_vk_id} already in favorites for user {user_id}")
+                return False
+
+            # Добавляем в избранное
+            self.cur.execute("""
+                INSERT INTO Favorites (user_id, favorite_vk_id)
+                VALUES (%s, %s)
+            """, (user_id, favorite_vk_id))
+
             self.conn.commit()
             return True
 
-        except psycopg2.IntegrityError as e:
-            self.conn.rollback()
-            logger.warning(f"User {favorite_vk_id} already in favorites for user {user_id}")
-            return False
         except Exception as e:
             self.conn.rollback()
             logger.error(f"Error adding favorite: {e}")

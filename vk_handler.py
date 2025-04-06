@@ -135,14 +135,35 @@ class VKHandler:
             logger.error(f"Error getting photos: {e}")
             return []
 
-    def like_photo(self, photo_id: int, owner_id: int) -> bool:
-        """Ставит лайк на фото"""
+    def like_photo(self, photo_id: int, owner_id: int, user_id: int) -> bool:
+        """
+        Ставит лайк на фото и сохраняет информацию в БД
+
+        Args:
+            photo_id: ID фотографии
+            owner_id: ID владельца фото
+            user_id: ID пользователя, который ставит лайк
+
+        Returns:
+            True если лайк успешно поставлен, иначе False
+        """
         try:
+            # Проверяем, не ставили ли уже лайк
+            if self.db and self.db.has_liked_photo(user_id, photo_id):
+                logger.info(f"User {user_id} already liked photo {photo_id}")
+                return False
+
+            # Ставим лайк через API
             self.vk.likes.add(
                 type='photo',
                 owner_id=owner_id,
                 item_id=photo_id
             )
+
+            # Сохраняем информацию о лайке в БД
+            if self.db:
+                self.db.add_like(user_id, owner_id, photo_id)
+
             return True
         except ApiError as e:
             logger.error(f"API like error: {e}")
